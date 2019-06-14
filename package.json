@@ -1,0 +1,15 @@
+{
+  "name": "kuunika-categories-display",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./bin/app.js",
+    "test": ""
+  },
+  "author": "Brett Onions",
+  "license": "GNU GPLv3",
+  "dependencies": {
+    "request": "^2.88.0"
+  }
+}
