@@ -39,6 +39,9 @@ jspm_packages/
 # TypeScript v1 declaration files
 typings/
 
+# Stored JSON Data
+bin/jsondata/
+
 # Optional npm cache directory
 .npm
 

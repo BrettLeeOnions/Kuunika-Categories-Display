@@ -2,7 +2,7 @@
   "name": "kuunika-categories-display",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "./bin/app.js",
   "scripts": {
     "start": "node ./bin/app.js",
     "test": ""
