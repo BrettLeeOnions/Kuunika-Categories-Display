@@ -10,12 +10,14 @@ let categoryData        = categoryJSON.data;
 
 //an array of values that represents category property in the payload
 let categories          = getAllCategories(categoryData);
-let subCategories       = initialiseSubCategories(categories, categories);
+let subCategories       = initialiseSubCategories(categories, categoryData);
 let hierarchicalDisplay = '';
 
 for (let category of categories) {
-    hierarchicalDisplay = category + '\n' + buildCategoryTable(0, 1, subCategories, category);
+    hierarchicalDisplay += category + '\n' + buildCategoryTable(0, 1, subCategories[category], category);
 }
+
+console.log(hierarchicalDisplay);
 
 function buildCategoryTable(parentId,depth,subCategory,category)
 {
@@ -30,7 +32,7 @@ function buildCategoryTable(parentId,depth,subCategory,category)
     let equalSigns = "==".repeat(depth);
 
     for (let child of children) {
-        let subChild = buildCategoryTable(child.id, depth + 1, subCategory);
+        let subChild = buildCategoryTable(child.id, depth + 1, subCategory, category);
         builtTable   += equalSigns + child.displayName + '\n' + subChild;
     }
 
