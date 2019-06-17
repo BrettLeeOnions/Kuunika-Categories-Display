@@ -10,47 +10,51 @@ const testCase2File      = path.join(__dirname,'/jsondata/test-case-2.json');
 
 if(!fs.existsSync(testCase1File)){
     createTestCaseFile();
+    process.exit();
 }
 
 //Reads the saved JSON file saved on disk and saves is to a Object
-let filePath            = __dirname + '/jsondata/test-case-1.json';
-let categoryJSON        = JSON.parse(fs.readFileSync(filePath));
+let categoryJSON        = require(testCase1File);
+
+console.log(createHierarchyString(categoryJSON));
+
+function createHierarchyString(categoryJSONData)
+{
+    //Splits the JSON Object into it two major parts
+    let categoryTarget      = categoryJSONData.target;
+    let categoryData        = categoryJSONData.data;
+
+    /*
+    * An array of values that represents category property in the payload
+    * This creates an array of the top level categories that will begin each section
+    * e.g. Clinical, Vaccination, Diagnostics
+    */
+    let categories          = getAllCategories(categoryData);
+
+    //This is an array of the containing all of the sub-catagories that will be displayed in a hierarchy 
+    let subCategories       = initialiseSubCategories(categories, categoryData);
+
+    //The final output will be a case of this 
+    let hierarchicalDisplay = '';
 
 
-//Splits the JSON Object into it two major parts
-let categoryTarget      = categoryJSON.target;
-let categoryData        = categoryJSON.data;
+    for (let category of categories) {
+        let subCategory = null;
 
-/*
-* An array of values that represents category property in the payload
-* This creates an array of the top level categories that will begin each section
-* e.g. Clinical, Vaccination, Diagnostics
-*/
-let categories          = getAllCategories(categoryData);
+        if(categoryTarget != 0){
+            subCategory = subCategories[category].filter((element) => element.id == categoryTarget || element.parentId == categoryTarget);
+        }
+        else{
+            subCategory = subCategories[category];
+        }
 
-//This is an array of the containing all of the sub-catagories that will be displayed in a hierarchy 
-let subCategories       = initialiseSubCategories(categories, categoryData);
-
-//The final output will be a case of this 
-let hierarchicalDisplay = '';
-
-
-for (let category of categories) {
-    let subCategory = null;
-
-    if(categoryTarget != 0){
-        subCategory = subCategories[category].filter((element) => element.id == categoryTarget || element.parentId == categoryTarget);
+        if(subCategory.length > 0){
+            hierarchicalDisplay += category + '\n' + buildCategoryTable(0, 1, subCategory, category) + '\n';
+        }
     }
-    else{
-        subCategory = subCategories[category];
-    }
 
-    if(subCategory.length > 0){
-        hierarchicalDisplay += category + '\n' + buildCategoryTable(0, 1, subCategory, category) + '\n';
-    }
+    return hierarchicalDisplay;
 }
-
-console.log(hierarchicalDisplay);
 
 function buildCategoryTable(parentId,depth,subCategory,category)
 {
@@ -74,7 +78,6 @@ function buildCategoryTable(parentId,depth,subCategory,category)
 
 }
 
-
 function initialiseSubCategories(categories, categoryData)
 {
     let subCategories = {};
@@ -86,7 +89,6 @@ function initialiseSubCategories(categories, categoryData)
     }
 
     return subCategories;
-
 }
 
 function getAllCategories(categoryData)
@@ -107,7 +109,8 @@ function getAllCategories(categoryData)
     }
 
     return categories;
-
 }
 
+module.exports ={
 
+}
