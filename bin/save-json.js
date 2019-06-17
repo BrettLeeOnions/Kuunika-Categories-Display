@@ -10,17 +10,19 @@ function createTestCaseFile()
         console.log(err);
     }).pipe(
         fs.createWriteStream(path.join(__dirname,'/jsondata/test-case-1.json'))
-        
-    );
-    console.log('Test case 1 created');
+    ).on('finish',() => {
+        console.log('File 1 has been created');
+    });
+    
 
     request.get('http://142.93.203.254:4200/test-case-2')
     .on('error', (err) =>{
         console.log(err);
     }).pipe(
         fs.createWriteStream(path.join(__dirname,'/jsondata/test-case-2.json'))
-    );
-    console.log('Test case 2 created');
+    ).on('finish',() => {
+        console.log('File 2 has been created');
+    });
 }
 createTestCaseFile();
 module.exports = {
